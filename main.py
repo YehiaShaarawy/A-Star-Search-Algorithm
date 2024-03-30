@@ -27,6 +27,19 @@ def AStarSearchAlgorithm():
         closed_nodes.append(opened_nodes[chosen_node]) # Add the node to the closed list
         del opened_nodes[chosen_node] # Remove the node from the opened list
 
+        if closed_nodes[-1][0] == 'G':  # If the goal node is reached
+            break
+
+        for item in tree[node]:  # Expand the chosen node
+            if item[0] in [closed_nodes[i][0] for i in range(len(closed_nodes))]:  # If the node is already visited,
+                continue
+            cost_table.update({item[0]: cost_table[node] + item[1]})  # Update the cost table
+            fn = cost_table[node] + heuristic_table[item[0]] + item[1]  # Calculate f(n) = g(n) + h(n)
+            temp = [item[0], fn]  # Store the f(n) value
+            opened_nodes.append(temp)  # Add the node to the opened list
+
+    return closed_nodes
+
 if __name__ == '__main__':
     visited_nodes = AStarSearchAlgorithm()
     print("Visited Nodes: ",visited_nodes)
